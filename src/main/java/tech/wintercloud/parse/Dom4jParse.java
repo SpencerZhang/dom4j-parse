@@ -2,7 +2,6 @@ package tech.wintercloud.parse;
 
 import com.alibaba.fastjson.JSONObject;
 import org.dom4j.*;
-import org.dom4j.tree.DefaultElement;
 import tech.wintercloud.utils.ParseUtil;
 
 import java.util.*;
