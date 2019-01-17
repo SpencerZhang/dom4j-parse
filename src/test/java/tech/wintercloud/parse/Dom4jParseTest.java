@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.alibaba.fastjson.JSONObject;
 import org.dom4j.*;
-import org.dom4j.tree.DefaultElement;
 import org.junit.Test;
 import tech.wintercloud.utils.ParseUtil;
 
