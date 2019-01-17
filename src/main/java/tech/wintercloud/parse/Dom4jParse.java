@@ -1,7 +1,9 @@
 package tech.wintercloud.parse;
 
+import com.alibaba.fastjson.JSONObject;
 import org.dom4j.*;
 import org.dom4j.tree.DefaultElement;
+import tech.wintercloud.utils.ParseUtil;
 
 import java.util.*;
 
@@ -61,21 +63,40 @@ public class Dom4jParse {
      * @return
      */
     public static Map<String,String> selectNodesValue4XPath(Document document,String xPathExpressions){
-        Map<String,String> result = new HashMap<String, String>(DEFAULT_INITIAL_CAPACITY);
-        List<Node> nodes = document.selectNodes(xPathExpressions);
-        for (int i = 0; i < nodes.size(); i++) {
-            DefaultElement element = (DefaultElement)nodes.get(i);
-            List<Node> subNodes = element.content();
-            for (int j = 0; j < subNodes.size(); j++) {
-                DefaultElement subElement = (DefaultElement)subNodes.get(j);
-                String key = subElement.getName();
-                String val = subElement.getStringValue();
-                result.put(key,val);
-            }
-        }
+        Map<String,String> result = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+        ParseUtil.selectNodesValue4XPath(document,xPathExpressions,result);
         return result;
     }
 
+
+    /**
+     * 使用XPath表达式获取node下所有标签值
+     * @param document
+     * @param xPathExpressions
+     * @return json string
+     */
+    public static String selectNodesValueJson4XPath(Document document,String xPathExpressions){
+        JSONObject result = new JSONObject();
+        Map<String,String> resultData = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+        ParseUtil.selectNodesValue4XPath(document,xPathExpressions,resultData);
+        result.putAll(resultData);
+        return result.toJSONString();
+    }
+
+
+    /**
+     * 使用XPath表达式获取node下所有标签值
+     * @param document
+     * @param xPathExpressions
+     * @return JSONObject
+     */
+    public static JSONObject selectNodesValueJsonObject4XPath(Document document,String xPathExpressions){
+        JSONObject result = new JSONObject();
+        Map<String,String> resultData = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+        ParseUtil.selectNodesValue4XPath(document,xPathExpressions,resultData);
+        result.putAll(resultData);
+        return result;
+    }
     /**
      * 使用XPath表达式获取某一个node标签值
      * @param document
@@ -83,11 +104,36 @@ public class Dom4jParse {
      * @return
      */
     public static Map<String,String> selectSingleNode4XPath(Document document, String xPathExpressions){
-        Map<String,String> result = new HashMap<String, String>(DEFAULT_INITIAL_CAPACITY);
-        Node node = document.selectSingleNode(xPathExpressions);
-        String key = node.getName();
-        String val = node.getStringValue();
-        result.put(key,val);
+        Map<String,String> result = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+        ParseUtil.selectSingleNodeValue4XPath(document,xPathExpressions,result);
+        return result;
+    }
+
+    /**
+     * 使用XPath表达式获取某一个node标签值
+     * @param document
+     * @param xPathExpressions
+     * @return json string
+     */
+    public static String selectSingleNodeValueJson4XPath(Document document, String xPathExpressions){
+        JSONObject result = new JSONObject();
+        Map<String,String> resultData = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+        ParseUtil.selectSingleNodeValue4XPath(document,xPathExpressions,resultData);
+        result.putAll(resultData);
+        return result.toJSONString();
+    }
+
+    /**
+     * 使用XPath表达式获取某一个node标签值
+     * @param document
+     * @param xPathExpressions
+     * @return JSONObject
+     */
+    public static JSONObject selectSingleNodeValueJsonObject4XPath(Document document, String xPathExpressions){
+        JSONObject result = new JSONObject();
+        Map<String,String> resultData = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+        ParseUtil.selectSingleNodeValue4XPath(document,xPathExpressions,resultData);
+        result.putAll(resultData);
         return result;
     }
 

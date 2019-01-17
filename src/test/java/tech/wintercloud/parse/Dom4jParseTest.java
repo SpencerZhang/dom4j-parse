@@ -2,19 +2,23 @@ package tech.wintercloud.parse;
 
 import static org.junit.Assert.assertTrue;
 
+import com.alibaba.fastjson.JSONObject;
 import org.dom4j.*;
 import org.dom4j.tree.DefaultElement;
 import org.junit.Test;
+import tech.wintercloud.utils.ParseUtil;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Spencer Chang
  * @date 2019-01-16 14:17
  */
 public class Dom4jParseTest {
-    static final String XMLDATA = "<?xml version=\"1.0\" encoding=\"gb2312\"?>" +
+    private static final String XMLDATA = "<?xml version=\"1.0\" encoding=\"gb2312\"?>" +
             "<packet>" +
             "<head>" +
             "<transCode>1</transCode>" +
@@ -57,6 +61,15 @@ public class Dom4jParseTest {
             "</lists>" +
             "</body>" +
             "</packet>";
+    private static Document document = null;
+    static {
+        try {
+            document = DocumentHelper.parseText(XMLDATA);
+        }catch (DocumentException e){
+            e.printStackTrace();
+        }
+
+    }
 
     @Test
     public void convert() throws DocumentException {
@@ -66,14 +79,12 @@ public class Dom4jParseTest {
 
     @Test
     public void getRootElement() throws DocumentException {
-        Document document = DocumentHelper.parseText(XMLDATA);
         Element element = document.getRootElement();
         System.out.println(element.toString());
     }
 
     @Test
     public void getNodeElements() throws DocumentException {
-        Document document = DocumentHelper.parseText(XMLDATA);
         Element element = document.getRootElement();
         Iterator<Element> heads = element.elementIterator("head");
         while (heads.hasNext()) {
@@ -85,39 +96,68 @@ public class Dom4jParseTest {
 
     @Test
     public void selectNodes4XPath() throws DocumentException {
-        Document document = DocumentHelper.parseText(XMLDATA);
         List<Node> nodes = document.selectNodes("//packet/head");
     }
 
     @Test
     public void selectNodesValue4XPath() throws DocumentException {
-        Document document = DocumentHelper.parseText(XMLDATA);
-        List<Node> heads = document.selectNodes("//packet/head");
-
-        for (int i = 0; i < heads.size(); i++) {
-            DefaultElement element = (DefaultElement) heads.get(i);
-            List<Node> nodes = element.content();
-            for (int j = 0; j < nodes.size(); j++) {
-                DefaultElement elementn = (DefaultElement) nodes.get(j);
-                System.out.println(elementn.getName());
-                System.out.println(elementn.getStringValue());
-            }
-        }
+        Map<String,String> result = new HashMap<>(16);
+        ParseUtil.selectNodesValue4XPath(document,"//packet/head",result);
+        result.forEach((k,v)->{
+            System.out.println(k);
+            System.out.println(v);
+        });
+    }
+    @Test
+    public void selectNodesValueJson4XPath() throws DocumentException {
+        JSONObject result = new JSONObject();
+        Map<String,String> resultData = new HashMap<>(16);
+        ParseUtil.selectNodesValue4XPath(document,"//packet/head",resultData);
+        result.putAll(resultData);
+        System.out.println(result.toJSONString());
+    }
+    @Test
+    public void selectNodesValueJsonObject4XPath() throws DocumentException {
+        JSONObject result = new JSONObject();
+        Map<String,String> resultData = new HashMap<>(16);
+        ParseUtil.selectNodesValue4XPath(document,"//packet/head",resultData);
+        result.putAll(resultData);
+        result.forEach((k,v)->{
+            System.out.println(k);
+            System.out.println(v);
+        });
     }
 
     @Test
     public void selectSingleNode4XPath() throws DocumentException {
-        Document document = DocumentHelper.parseText(XMLDATA);
-        Node node = document.selectSingleNode("//packet/head/transCode");
-        String key = node.getName();
-        String val = node.getStringValue();
-        System.out.println(key);
-        System.out.println(val);
+        Map<String,String> result = new HashMap<>(16);
+        ParseUtil.selectSingleNodeValue4XPath(document,"//packet/head/transCode",result);
+        result.forEach((k,v)->{
+            System.out.println(k);
+            System.out.println(v);
+        });
     }
-
+    @Test
+    public void selectSingleNodeValueJson4XPath() throws DocumentException {
+        JSONObject result = new JSONObject();
+        Map<String,String> resultData = new HashMap<>(16);
+        ParseUtil.selectSingleNodeValue4XPath(document,"//packet/head/transCode",resultData);
+        result.putAll(resultData);
+        System.out.println(result.toJSONString());
+    }
+    @Test
+    public void selectSingleNodeValueJsonObject4XPath() throws DocumentException {
+        JSONObject result = new JSONObject();
+        Map<String,String> resultData = new HashMap<>(16);
+        ParseUtil.selectSingleNodeValue4XPath(document,"//packet/head/transCode",resultData);
+        result.putAll(resultData);
+        result.forEach((k,v)->{
+            System.out.println(k);
+            System.out.println(v);
+        });
+    }
     @Test
     public void selectSingleNodeValue4XPath() throws DocumentException {
-        Document document = DocumentHelper.parseText(XMLDATA);
         Node node = document.selectSingleNode("//packet/head/transCode");
         System.out.println(node.getStringValue());
     }
