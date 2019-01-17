@@ -44,7 +44,7 @@
     </dependencies>
 
     <build>
-        <finalName>dom4j-parse</finalName>
+        <!--<finalName>dom4j-parse</finalName>jar文件名，默认值是${artifactId}-${version}-->
         <resources>
             <resource>
                 <directory>src/main/java/</directory>
